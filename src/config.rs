@@ -18,6 +18,7 @@ pub struct Config {
     pub layout: Option<String>,
     pub header_icons: Option<Vec<String>>,
     pub footer_text: Option<String>,
+    pub palette_style: Option<String>, // "dots", "squares", "lines", "triangles"
 }
 
 impl Default for Config {
@@ -36,6 +37,7 @@ impl Default for Config {
         icons.insert("battery".to_string(), "".to_string());
         icons.insert("uptime".to_string(), "󰔛".to_string());
         icons.insert("terminal".to_string(), "".to_string());
+        icons.insert("palette".to_string(), "󰨬".to_string()); // Palette icon
 
         let mut colors = HashMap::new();
         // Default colors (using crossterm color names as strings)
@@ -65,6 +67,7 @@ impl Default for Config {
             layout: None,
             header_icons: None,
             footer_text: None,
+            palette_style: None,
         }
     }
 }

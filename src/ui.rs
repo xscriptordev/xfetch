@@ -1,6 +1,6 @@
 use crate::config::Config;
 use crate::info::Info;
-use crossterm::style::{Color, Print, ResetColor, SetForegroundColor};
+use crossterm::style::{Color, Print, ResetColor, SetForegroundColor, SetBackgroundColor};
 use crossterm::execute;
 use std::io::stdout;
 use viuer::{print_from_file, Config as ViuerConfig};
@@ -18,11 +18,16 @@ fn expand_path(path: &str) -> PathBuf {
 pub fn draw(info: &Info, config: &Config) {
     let mut stdout = stdout();
 
-    // Check if layout is "pacman"
-    let is_pacman = config.layout.as_deref() == Some("pacman");
+    // Check layout type
+    let layout_type = config.layout.as_deref().unwrap_or("default");
+    let is_pacman = layout_type == "pacman";
+    let is_box = layout_type == "box";
+    let is_line = layout_type == "line";
+    let is_dots = layout_type == "dots";
+    let is_bottom_line = layout_type == "bottom_line";
 
     // Prepare Info Items
-    let info_items = prepare_info(info, config, is_pacman);
+    let info_items = prepare_info(info, config, is_pacman || is_box || is_line || is_dots || is_bottom_line);
 
     // ASCII/Image handling
     let mut ascii_lines: Vec<String> = Vec::new();
@@ -90,8 +95,10 @@ pub fn draw(info: &Info, config: &Config) {
     // Footer: ╰── X ──╯
     
     let info_height = info_items.len();
-    let total_height = if is_pacman {
+    let total_height = if is_pacman || is_box {
         info_height + 2 // +2 for borders
+    } else if is_bottom_line {
+        info_height + 1 // +1 for bottom line
     } else {
         info_height
     };
@@ -104,16 +111,6 @@ pub fn draw(info: &Info, config: &Config) {
     for i in 0..max_lines {
         // 1. Print Logo Part
         if image_printed {
-            // If image was printed, we just need to move cursor to the right column?
-            // Actually, if we moved cursor up, we are at the top-left of the image.
-            // We need to print spaces to skip the image width.
-            // But wait, print_from_file prints blocks.
-            // We need to move cursor right by ascii_width for each line.
-            // execute!(stdout, crossterm::cursor::MoveRight(ascii_width as u16)).unwrap();
-            // This is complex to sync. 
-            // Simplified approach for image: Print image, then print info below?
-            // Or use cursor save/restore.
-            // Let's stick to simple space padding for now, assuming cursor is at start of line.
             execute!(stdout, crossterm::cursor::MoveRight(ascii_width as u16)).unwrap();
             execute!(stdout, Print(gap)).unwrap();
         } else {
@@ -162,9 +159,6 @@ pub fn draw(info: &Info, config: &Config) {
                 // Bottom Border with Footer
                 // ╰────── X ──────╯
                 let footer = config.footer_text.as_deref().unwrap_or("X");
-                // Calculate width to match top roughly or fixed
-                // Top width depends on icons. Let's make it fixed or based on content?
-                // For now fixed length line
                 execute!(
                     stdout, 
                     SetForegroundColor(Color::Green), 
@@ -187,6 +181,59 @@ pub fn draw(info: &Info, config: &Config) {
                     execute!(stdout, Print("\n")).unwrap();
                 }
             }
+        } else if is_box {
+            if i == 0 {
+                execute!(stdout, SetForegroundColor(Color::White), Print("╭──────────────────────────────╮"), ResetColor, Print("\n")).unwrap();
+            } else if i == total_height - 1 {
+                execute!(stdout, SetForegroundColor(Color::White), Print("╰──────────────────────────────╯"), ResetColor, Print("\n")).unwrap();
+            } else {
+                let item_idx = i - 1;
+                if item_idx < info_items.len() {
+                    let (key, value) = &info_items[item_idx];
+                    execute!(stdout, SetForegroundColor(Color::White), Print("│ "), ResetColor).unwrap();
+                    print_info_line_no_newline(&mut stdout, key, value, config);
+                    // Padding logic would be needed for perfect box, simplified for now
+                    // Just closing the box roughly or leaving open
+                    // For perfect alignment, we need to know max width of content.
+                    // Assuming user content fits or we just print without right border for now or fixed width.
+                    // Let's just print newline for now as right border alignment is complex without pre-calc.
+                    // execute!(stdout, SetForegroundColor(Color::White), Print(" │"), ResetColor, Print("\n")).unwrap();
+                    execute!(stdout, Print("\n")).unwrap();
+                } else {
+                    execute!(stdout, SetForegroundColor(Color::White), Print("│                              │"), ResetColor, Print("\n")).unwrap();
+                }
+            }
+        } else if is_line {
+             let item_idx = i;
+             if item_idx < info_items.len() {
+                let (key, value) = &info_items[item_idx];
+                print_info_line(&mut stdout, key, value, config);
+                if (item_idx + 1) % 3 == 0 && item_idx != info_items.len() - 1 {
+                    execute!(stdout, SetForegroundColor(Color::DarkGrey), Print("──────────────────────────────"), ResetColor, Print("\n")).unwrap();
+                }
+            } else {
+                execute!(stdout, Print("\n")).unwrap();
+            }
+        } else if is_dots {
+             let item_idx = i;
+             if item_idx < info_items.len() {
+                let (key, value) = &info_items[item_idx];
+                print_info_line(&mut stdout, key, value, config);
+                if (item_idx + 1) % 3 == 0 && item_idx != info_items.len() - 1 {
+                    execute!(stdout, SetForegroundColor(Color::DarkGrey), Print(".............................."), ResetColor, Print("\n")).unwrap();
+                }
+            } else {
+                execute!(stdout, Print("\n")).unwrap();
+            }
+        } else if is_bottom_line {
+             if i < info_items.len() {
+                let (key, value) = &info_items[i];
+                print_info_line(&mut stdout, key, value, config);
+            } else if i == info_items.len() {
+                 execute!(stdout, SetForegroundColor(Color::White), Print("──────────────────────────────"), ResetColor, Print("\n")).unwrap();
+            } else {
+                execute!(stdout, Print("\n")).unwrap();
+            }
         } else {
             // Classic Layout
              if i < info_items.len() {
@@ -199,11 +246,91 @@ pub fn draw(info: &Info, config: &Config) {
     }
 }
 
+fn print_info_line_no_newline(stdout: &mut std::io::Stdout, key: &str, value: &str, config: &Config) {
+    if key == "header" {
+         execute!(stdout, Print(value)).unwrap();
+    } else if key == "sep" {
+         execute!(stdout, Print(value)).unwrap();
+    } else if key == "palette" {
+         print_palette_no_newline(stdout, config);
+    } else {
+        // Get Icon and Color
+        let icon = config.icons.get(key).map(|s| s.as_str()).unwrap_or("●");
+        let color_str = config.colors.get(key).map(|s| s.as_str()).unwrap_or("White");
+        let color = parse_color(color_str);
+
+        execute!(
+            stdout,
+            SetForegroundColor(color),
+            Print(format!("{} ", icon)),
+            ResetColor,
+            Print(format!("{} ", value))
+        ).unwrap();
+    }
+}
+
+fn print_palette_no_newline(stdout: &mut std::io::Stdout, config: &Config) {
+    let colors = [
+        Color::Black, Color::Red, Color::Green, Color::Yellow,
+        Color::Blue, Color::Magenta, Color::Cyan, Color::White,
+    ];
+    let bright_colors = [
+        Color::DarkGrey, Color::DarkRed, Color::DarkGreen, Color::DarkYellow,
+        Color::DarkBlue, Color::DarkMagenta, Color::DarkCyan, Color::Grey,
+    ];
+
+    let style = config.palette_style.as_deref().unwrap_or("squares");
+    
+    // Icon (Palette emoji or custom)
+    let icon = config.icons.get("palette").map(|s| s.as_str()).unwrap_or("🎨");
+    let color_str = config.colors.get("palette").map(|s| s.as_str()).unwrap_or("White");
+    let color = parse_color(color_str);
+
+    execute!(
+        stdout,
+        SetForegroundColor(color),
+        Print(format!("{} ", icon)),
+        ResetColor
+    ).unwrap();
+
+    match style {
+        "dots" => {
+            for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetForegroundColor(*c), Print("● ")).unwrap();
+            }
+        },
+        "squares" => {
+             for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetBackgroundColor(*c), Print("  "), ResetColor, Print(" ")).unwrap();
+            }
+        },
+        "lines" => {
+            for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetBackgroundColor(*c), Print("   ")).unwrap();
+            }
+            execute!(stdout, ResetColor).unwrap();
+        },
+        "triangles" => {
+             for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetForegroundColor(*c), Print("▲ ")).unwrap();
+            }
+        }
+        _ => {
+            // Default to squares
+             for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetBackgroundColor(*c), Print("  "), ResetColor, Print(" ")).unwrap();
+            }
+        }
+    }
+}
+
 fn print_info_line(stdout: &mut std::io::Stdout, key: &str, value: &str, config: &Config) {
     if key == "header" {
          execute!(stdout, Print(value), Print("\n")).unwrap();
     } else if key == "sep" {
          execute!(stdout, Print(value), Print("\n")).unwrap();
+    } else if key == "palette" {
+         print_palette(stdout, config);
     } else {
         // Get Icon and Color
         let icon = config.icons.get(key).map(|s| s.as_str()).unwrap_or("●");
@@ -219,6 +346,62 @@ fn print_info_line(stdout: &mut std::io::Stdout, key: &str, value: &str, config:
             Print("\n")
         ).unwrap();
     }
+}
+
+fn print_palette(stdout: &mut std::io::Stdout, config: &Config) {
+    let colors = [
+        Color::Black, Color::Red, Color::Green, Color::Yellow,
+        Color::Blue, Color::Magenta, Color::Cyan, Color::White,
+    ];
+    let bright_colors = [
+        Color::DarkGrey, Color::DarkRed, Color::DarkGreen, Color::DarkYellow,
+        Color::DarkBlue, Color::DarkMagenta, Color::DarkCyan, Color::Grey,
+    ];
+
+    let style = config.palette_style.as_deref().unwrap_or("squares");
+    
+    // Icon (Palette emoji or custom)
+    let icon = config.icons.get("palette").map(|s| s.as_str()).unwrap_or("🎨");
+    let color_str = config.colors.get("palette").map(|s| s.as_str()).unwrap_or("White");
+    let color = parse_color(color_str);
+
+    execute!(
+        stdout,
+        SetForegroundColor(color),
+        Print(format!("{} ", icon)),
+        ResetColor
+    ).unwrap();
+
+    match style {
+        "dots" => {
+            for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetForegroundColor(*c), Print("● ")).unwrap();
+            }
+        },
+        "squares" => {
+             for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetBackgroundColor(*c), Print("  "), ResetColor, Print(" ")).unwrap();
+            }
+        },
+        "lines" => {
+            for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetBackgroundColor(*c), Print("   ")).unwrap();
+            }
+            execute!(stdout, ResetColor).unwrap();
+        },
+        "triangles" => {
+             for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetForegroundColor(*c), Print("▲ ")).unwrap();
+            }
+        }
+        _ => {
+            // Default to squares
+             for c in colors.iter().chain(bright_colors.iter()) {
+                execute!(stdout, SetBackgroundColor(*c), Print("  "), ResetColor, Print(" ")).unwrap();
+            }
+        }
+    }
+    execute!(stdout, Print("\n")).unwrap();
 }
 
 fn get_default_ascii() -> String {
@@ -270,6 +453,7 @@ fn prepare_info(info: &Info, config: &Config, is_pacman: bool) -> Vec<(String, S
             "battery" => Some(info.battery.clone()),
             "uptime" => Some(info.uptime.clone()),
             "terminal" => Some(info.terminal.clone()),
+            "palette" => Some("palette".to_string()), // Placeholder, handled in print_info_line
             _ => None,
         };
 

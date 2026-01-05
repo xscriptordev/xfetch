@@ -18,24 +18,11 @@ To use this layout, simply omit the `layout` key in your config or set it to `nu
 }
 ```
 
-**Appearance:**
-```
-       \\\    ///    X@hostname
-        \\\  ///     ---------------------------
-         \\///        Ubuntu 24.04
-         ///\\        6.6.87
-        ///  \\\      756 (dpkg)
-       ///    \\\     zsh
-      ///      \\\    4.50 GiB / 16.00 GiB
-```
-
 ### 2. Pac-Man Layout
 
-A boxed layout inspired by the Pac-Man game interface. It features a top border with customizable "ghost" icons and a bottom border with custom text.
+A boxed layout inspired by the Pac-Man game interface.
 
 **Configuration:**
-Set the `layout` key to `"pacman"`.
-
 ```jsonc
 {
     "layout": "pacman",
@@ -44,50 +31,101 @@ Set the `layout` key to `"pacman"`.
 }
 ```
 
+### 3. Box Layout
+
+Displays the system information enclosed in a simple box with rounded corners.
+
+**Configuration:**
+```jsonc
+{
+    "layout": "box"
+}
+```
+
 **Appearance:**
 ```
-                         ╭─ ᗧ ● ● ● ● ────────────────╮
+                         ╭──────────────────────────────╮
+      \\\      ///       │  Ubuntu 24.04               
+       \\\    ///        │  6.6.87                     
+        \\\  ///         │  756 (dpkg)                 
+         \\///           │  zsh                        
+         ///\\           │  4.50 GiB / 16.00 GiB       
+        ///  \\\         │                              
+       ///    \\\        │                              
+      ///      \\\       ╰──────────────────────────────╯
+```
+
+### 4. Line Layout
+
+Displays system information with a horizontal separator line after every 3 modules. Useful for grouping related information.
+
+**Configuration:**
+```jsonc
+{
+    "layout": "line"
+}
+```
+
+**Appearance:**
+```
+      \\\      ///        Ubuntu 24.04
+       \\\    ///         6.6.87
+        \\\  ///          756 (dpkg)
+         \\///           ──────────────────────────────
+         ///\\            zsh
+        ///  \\\          4.50 GiB / 16.00 GiB
+       ///    \\\        
+      ///      \\\       
+```
+
+### 5. Dots Layout
+
+Similar to the Line layout, but uses dots as separators between groups of 3 modules.
+
+**Configuration:**
+```jsonc
+{
+    "layout": "dots"
+}
+```
+
+**Appearance:**
+```
+      \\\      ///        Ubuntu 24.04
+       \\\    ///         6.6.87
+        \\\  ///          756 (dpkg)
+         \\///           ..............................
+         ///\\            zsh
+        ///  \\\          4.50 GiB / 16.00 GiB
+       ///    \\\        
+      ///      \\\       
+```
+
+### 6. Bottom Line Layout
+
+A minimal layout that adds a single horizontal line at the very bottom of the information list.
+
+**Configuration:**
+```jsonc
+{
+    "layout": "bottom_line"
+}
+```
+
+**Appearance:**
+```
       \\\      ///        Ubuntu 24.04
        \\\    ///         6.6.87
         \\\  ///          756 (dpkg)
          \\///            zsh
          ///\\            4.50 GiB / 16.00 GiB
-        ///  \\\         
+        ///  \\\         ──────────────────────────────
        ///    \\\        
-      ///      \\\       ╰────────── GAME OVER ──────────╯
+      ///      \\\       
 ```
 
 ## Creating Custom Layouts
 
-Currently, `xfetch` supports the predefined layouts mentioned above. However, you can heavily customize the appearance within these layouts using the configuration file.
-
-### Customizing the Pac-Man Layout
-
-You can change the icons in the header to anything you like (e.g., emojis, text, Nerd Font icons).
-
-**Example: Traffic Lights**
-```jsonc
-{
-    "layout": "pacman",
-    "header_icons": ["🔴", "🟡", "🟢"],
-    "footer_text": "GO!"
-}
-```
-
-**Example: Minimal**
-```jsonc
-{
-    "layout": "pacman",
-    "header_icons": ["sys", "info"],
-    "footer_text": "v1.0"
-}
-```
-
-### Future Layouts
-
-We plan to add more flexible layout systems in the future, allowing for:
-*   Custom header/footer structures.
-*   Alignment options (center, right).
-*   Grid layouts.
+Currently, `xfetch` supports the predefined layouts mentioned above. However, you can customize components like header icons and footer text within supported layouts (like `pacman`).
 
 Check the `CONFIGURATION.md` for full details on how to configure modules and colors.

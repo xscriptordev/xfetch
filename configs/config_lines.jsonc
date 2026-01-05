@@ -3,7 +3,7 @@
     "layout": "pacman",
     "header_icons": ["ᗧ", "ᗣ", "ᗣ", "ᗣ", "ᗣ", "●"],
     "footer_text": "* X *",
-    "palette_style": "squares", // dots, squares, lines, triangles
+    "palette_style": "lines",
     "modules": [
         "os", "kernel", "uptime", "packages", "wm", "shell", "terminal", "cpu", "gpu", "memory", "disk", "battery", "palette"
     ],
@@ -38,6 +38,6 @@
         "memory": "Green",
         "disk": "Yellow",
         "battery": "green",
-        "palette": "red"
+        "palette": "White"
     }
 }

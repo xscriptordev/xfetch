@@ -44,6 +44,7 @@ The `modules` array determines which information is displayed and in what order.
 *   `swap`: Swap memory usage
 *   `disk`: Disk usage (first disk)
 *   `battery`: Battery percentage and status
+*   `palette`: Color palette
 
 ## Logos and ASCII Art
 
