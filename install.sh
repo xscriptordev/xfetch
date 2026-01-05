@@ -34,7 +34,7 @@ cp target/release/xfetch "$INSTALL_DIR/"
 echo -e "\033[1;34m Setting up default config... \033[0m"
 mkdir -p "$CONFIG_DIR"
 if [ ! -f "$CONFIG_DIR/config.jsonc" ]; then
-    cp configs/config_11_pacman.jsonc "$CONFIG_DIR/config.jsonc"
+    cp configs/config.jsonc "$CONFIG_DIR/config.jsonc"
     # Copy logos if needed
     mkdir -p "$CONFIG_DIR/logos"
     cp -r logos/* "$CONFIG_DIR/logos/"

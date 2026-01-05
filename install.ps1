@@ -33,20 +33,24 @@ Set-Location $TempDir
 Write-Host "Building and installing xfetch..." -ForegroundColor Cyan
 cargo install --path .
 
-# Config
+# Setup Config
 $ConfigDir = Join-Path $env:APPDATA "xfetch"
+Write-Host "Setting up default config..." -ForegroundColor Cyan
 if (-not (Test-Path $ConfigDir)) {
-    Write-Host "Setting up default configuration..." -ForegroundColor Cyan
-    New-Item -Path $ConfigDir -ItemType Directory | Out-Null
-    
-    # Copy config
-    Copy-Item "configs\config_11_pacman.jsonc" (Join-Path $ConfigDir "config.jsonc")
-    
-    # Copy logos
-    $LogosDir = Join-Path $ConfigDir "logos"
-    New-Item -Path $LogosDir -ItemType Directory | Out-Null
-    Copy-Item "logos\*" $LogosDir -Recurse
+    New-Item -ItemType Directory -Path $ConfigDir -Force | Out-Null
 }
+
+$ConfigFile = Join-Path $ConfigDir "config.jsonc"
+if (-not (Test-Path $ConfigFile)) {
+    Copy-Item "configs\config.jsonc" $ConfigFile
+}
+
+# Copy logos
+$LogosDir = Join-Path $ConfigDir "logos"
+if (-not (Test-Path $LogosDir)) {
+    New-Item -ItemType Directory -Path $LogosDir -Force | Out-Null
+}
+Copy-Item "logos\*" $LogosDir -Recurse -Force
 
 # Cleanup
 Set-Location $env:USERPROFILE

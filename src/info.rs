@@ -238,6 +238,15 @@ fn get_packages_info() -> String {
              }
         }
     }
+    // MacOS
+    if cfg!(target_os = "macos") {
+        if let Ok(output) = Command::new("brew").arg("list").arg("--formula").output() {
+             if output.status.success() {
+                 let count = String::from_utf8_lossy(&output.stdout).lines().count();
+                 return format!("{} (brew)", count);
+             }
+        }
+    }
     "Unknown".to_string()
 }
 

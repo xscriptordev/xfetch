@@ -32,8 +32,9 @@ The `modules` array determines which information is displayed and in what order.
 **Available Modules:**
 *   `os`: Operating System name and architecture
 *   `kernel`: Kernel version
+*   `hostname`: Hostname of the machine
 *   `uptime`: System uptime
-*   `packages`: Package count (pacman, dpkg, scoop, etc.)
+*   `packages`: Package count (pacman, dpkg, brew, scoop, etc.)
 *   `shell`: Current shell (bash, zsh, powershell, etc.)
 *   `terminal`: Current terminal emulator
 *   `wm`: Window Manager / Desktop Environment
@@ -53,13 +54,14 @@ Create a text file (e.g., `logo.txt`). You can use ANSI escape codes for colors 
 
 ```jsonc
 {
-    "logo_path": "/path/to/logo.txt",
+    // You can use tilde (~) for home directory
+    "logo_path": "~/.config/xfetch/logos/arch.txt",
     // ...
 }
 ```
 
-### Images (Experimental)
-xfetch supports displaying images (png, jpg) if your terminal supports it (using protocols like iTerm2, Kitty, or Sixel, handled by `viuer`).
+### Images
+xfetch supports displaying images (png, jpg, svg) if your terminal supports it (using protocols like iTerm2, Kitty, or Sixel, handled by `viuer`).
 
 ```jsonc
 {
@@ -111,7 +113,22 @@ You can customize the icon displayed next to each module. You can use standard E
 You can set the color for the icon/label of each module.
 
 **Available Colors:**
-`Black`, `Red`, `Green`, `Yellow`, `Blue`, `Magenta`, `Cyan`, `White`, `Grey`, `DarkRed`, `DarkGreen`, `DarkYellow`, `DarkBlue`, `DarkMagenta`, `DarkCyan`.
+*   `Black`
+*   `Red`
+*   `Green`
+*   `Yellow`
+*   `Blue`
+*   `Magenta`
+*   `Cyan`
+*   `White`
+*   `Grey` (or `Gray`)
+*   `DarkGrey` (or `DarkGray`)
+*   `DarkRed`
+*   `DarkGreen`
+*   `DarkYellow`
+*   `DarkBlue`
+*   `DarkMagenta`
+*   `DarkCyan`
 
 ```jsonc
 {
@@ -127,7 +144,7 @@ You can set the color for the icon/label of each module.
 
 ```jsonc
 {
-    "logo_path": "logos/ghost.txt",
+    "logo_path": "~/.config/xfetch/logos/ghost.txt",
     "layout": "pacman",
     "header_icons": ["ᗧ", "ᗣ", "ᗣ"],
     "footer_text": "xfetch",
