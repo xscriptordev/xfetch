@@ -58,13 +58,35 @@ add_to_path() {
     fi
 }
 
+add_xdg_config() {
+    local shell_rc="$1"
+    if [ -f "$shell_rc" ]; then
+        if ! grep -q "export XDG_CONFIG_HOME=\"$HOME/.config\"" "$shell_rc"; then
+            echo -e "\033[1;32m Adding XDG_CONFIG_HOME to $shell_rc \033[0m"
+            echo "" >> "$shell_rc"
+            echo "export XDG_CONFIG_HOME=\"$HOME/.config\"" >> "$shell_rc"
+        else
+            echo -e "\033[1;30m XDG_CONFIG_HOME already configured in $shell_rc \033[0m"
+        fi
+    fi
+}
+
 echo -e "\033[1;34m Configuring shell environment... \033[0m"
 add_to_path "$HOME/.bashrc"
 add_to_path "$HOME/.zshrc"
+# Add XDG_CONFIG_HOME to shell configurations
+add_xdg_config "$HOME/.bashrc"
+add_xdg_config "$HOME/.zshrc"
 # macOS specific
 if [[ "$OSTYPE" == "darwin"* ]]; then
     add_to_path "$HOME/.bash_profile"
     add_to_path "$HOME/.zprofile"
+    if [ ! -e "$HOME/Library/Application Support/xfetch" ]; then
+        echo -e "\033[1;34m Creating macOS config symlink... \033[0m"
+        ln -s "$HOME/.config/xfetch" "$HOME/Library/Application Support/xfetch"
+    else
+        echo -e "\033[1;30m macOS config path already exists \033[0m"
+    fi
 fi
 
 echo -e "\033[1;32m Installation complete! \033[0m"
