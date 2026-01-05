@@ -25,6 +25,7 @@ impl Default for Config {
         let mut icons = HashMap::new();
         icons.insert("os".to_string(), "".to_string()); // Arch icon default
         icons.insert("kernel".to_string(), "".to_string());
+        icons.insert("hostname".to_string(), "".to_string()); // Hostname icon
         icons.insert("wm".to_string(), "".to_string());
         icons.insert("packages".to_string(), "".to_string());
         icons.insert("shell".to_string(), "".to_string());

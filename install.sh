@@ -35,8 +35,7 @@ echo -e "\033[1;34m Setting up default config... \033[0m"
 mkdir -p "$CONFIG_DIR"
 if [ ! -f "$CONFIG_DIR/config.jsonc" ]; then
     cp configs/config_11_pacman.jsonc "$CONFIG_DIR/config.jsonc"
-    # Copy logos if needed, though they are usually paths.
-    # Ideally, binary should embed default logos or we copy assets.
+    # Copy logos if needed
     mkdir -p "$CONFIG_DIR/logos"
     cp -r logos/* "$CONFIG_DIR/logos/"
 fi
@@ -44,11 +43,29 @@ fi
 # Cleanup
 rm -rf "$TEMP_DIR"
 
-# Path check
-if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
-    echo -e "\033[1;33m Warning: $INSTALL_DIR is not in your PATH. \033[0m"
-    echo "Add the following to your shell config (.bashrc, .zshrc, etc.):"
-    echo "export PATH=\"\$HOME/.local/bin:\$PATH\""
+# Add to PATH
+add_to_path() {
+    local shell_rc="$1"
+    if [ -f "$shell_rc" ]; then
+        if ! grep -q "export PATH=\"$INSTALL_DIR:\$PATH\"" "$shell_rc" && ! grep -q "export PATH=\"\$HOME/.local/bin:\$PATH\"" "$shell_rc"; then
+            echo -e "\033[1;32m Adding xfetch to PATH in $shell_rc \033[0m"
+            echo "" >> "$shell_rc"
+            echo "# xfetch path" >> "$shell_rc"
+            echo "export PATH=\"$INSTALL_DIR:\$PATH\"" >> "$shell_rc"
+        else
+            echo -e "\033[1;30m Path already configured in $shell_rc \033[0m"
+        fi
+    fi
+}
+
+echo -e "\033[1;34m Configuring shell environment... \033[0m"
+add_to_path "$HOME/.bashrc"
+add_to_path "$HOME/.zshrc"
+# macOS specific
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    add_to_path "$HOME/.bash_profile"
+    add_to_path "$HOME/.zprofile"
 fi
 
-echo -e "\033[1;32m Installation complete! Run 'xfetch' to start. \033[0m"
+echo -e "\033[1;32m Installation complete! \033[0m"
+echo -e "You may need to restart your terminal or run 'source ~/.bashrc' (or ~/.zshrc) to use xfetch."

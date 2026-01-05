@@ -4,6 +4,16 @@ use crossterm::style::{Color, Print, ResetColor, SetForegroundColor};
 use crossterm::execute;
 use std::io::stdout;
 use viuer::{print_from_file, Config as ViuerConfig};
+use std::path::PathBuf;
+
+fn expand_path(path: &str) -> PathBuf {
+    if path.starts_with("~") {
+        if let Some(home) = dirs::home_dir() {
+            return home.join(&path[2..]);
+        }
+    }
+    PathBuf::from(path)
+}
 
 pub fn draw(info: &Info, config: &Config) {
     let mut stdout = stdout();
@@ -19,9 +29,10 @@ pub fn draw(info: &Info, config: &Config) {
     let mut image_printed = false;
     let mut ascii_width = 0;
 
-    if let Some(path) = &config.logo_path {
+    if let Some(path_str) = &config.logo_path {
+        let path = expand_path(path_str);
         // Try to print as image if extension suggests it
-        if path.ends_with(".png") || path.ends_with(".jpg") || path.ends_with(".jpeg") {
+        if path_str.ends_with(".png") || path_str.ends_with(".jpg") || path_str.ends_with(".jpeg") || path_str.ends_with(".svg") {
             // Use viuer to print image
             // We need to print it on the left side, which is tricky with viuer as it prints to stdout directly.
             // viuer doesn't easily support side-by-side text without cursor manipulation.
@@ -40,7 +51,7 @@ pub fn draw(info: &Info, config: &Config) {
             };
             
             // Print image
-            if let Ok((width, height)) = print_from_file(path, &conf) {
+            if let Ok((width, height)) = print_from_file(&path, &conf) {
                 image_printed = true;
                 ascii_width = width as usize;
                 // Move cursor up by height
@@ -48,14 +59,15 @@ pub fn draw(info: &Info, config: &Config) {
             }
         } else {
              // Treat as text/ascii
-             if let Ok(content) = std::fs::read_to_string(path) {
+             if let Ok(content) = std::fs::read_to_string(&path) {
                  for line in content.lines() {
                      ascii_lines.push(line.to_string());
                  }
              }
         }
-    } else if let Some(path) = &config.ascii {
-        if let Ok(content) = std::fs::read_to_string(path) {
+    } else if let Some(path_str) = &config.ascii {
+        let path = expand_path(path_str);
+        if let Ok(content) = std::fs::read_to_string(&path) {
              for line in content.lines() {
                  ascii_lines.push(line.to_string());
              }
@@ -256,6 +268,7 @@ fn prepare_info(info: &Info, config: &Config, is_pacman: bool) -> Vec<(String, S
         let val = match module.as_str() {
             "os" => Some(info.os.clone()),
             "kernel" => Some(info.kernel.clone()),
+            "hostname" => Some(info.host_name.clone()),
             "wm" => Some(info.desktop.clone()),
             "packages" => Some(info.packages.clone()),
             "shell" => Some(info.shell.clone()),
