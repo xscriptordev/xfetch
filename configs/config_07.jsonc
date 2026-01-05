@@ -1,0 +1,18 @@
+{
+    "modules": [
+        "os", "cpu", "memory", "disk"
+    ],
+    "show_colors": true,
+    "icons": {
+        "os": "",
+        "cpu": "",
+        "memory": "",
+        "disk": "󰋊"
+    },
+    "colors": {
+        "os": "Cyan",
+        "cpu": "Magenta",
+        "memory": "Cyan",
+        "disk": "Magenta"
+    }
+}

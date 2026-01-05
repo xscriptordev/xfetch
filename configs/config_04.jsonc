@@ -1,0 +1,20 @@
+{
+    "modules": [
+        "os", "kernel", "uptime", "memory", "disk"
+    ],
+    "show_colors": true,
+    "icons": {
+        "os": ">>",
+        "kernel": ">>",
+        "uptime": ">>",
+        "memory": ">>",
+        "disk": ">>"
+    },
+    "colors": {
+        "os": "Green",
+        "kernel": "Green",
+        "uptime": "Green",
+        "memory": "Green",
+        "disk": "Green"
+    }
+}

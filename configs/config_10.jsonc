@@ -1,0 +1,19 @@
+{
+    "logo_path": "logos/arch.txt",
+    "modules": [
+        "os", "kernel", "uptime", "shell"
+    ],
+    "show_colors": true,
+    "icons": {
+        "os": "",
+        "kernel": "",
+        "uptime": "󰔛",
+        "shell": ""
+    },
+    "colors": {
+        "os": "Cyan",
+        "kernel": "Cyan",
+        "uptime": "Cyan",
+        "shell": "Cyan"
+    }
+}

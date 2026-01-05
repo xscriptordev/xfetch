@@ -1,0 +1,18 @@
+{
+    "modules": [
+        "os", "kernel", "uptime", "shell"
+    ],
+    "show_colors": true,
+    "icons": {
+        "os": "",
+        "kernel": "",
+        "uptime": "",
+        "shell": ""
+    },
+    "colors": {
+        "os": "White",
+        "kernel": "White",
+        "uptime": "White",
+        "shell": "White"
+    }
+}

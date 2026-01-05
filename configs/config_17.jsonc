@@ -1,0 +1,8 @@
+{
+    "layout": "pacman",
+    "header_icons": ["x", "o", "x"],
+    "footer_text": "XOX",
+    "modules": ["os", "kernel"],
+    "icons": {"os": "X", "kernel": "O"},
+    "colors": {"os": "White", "kernel": "White"}
+}

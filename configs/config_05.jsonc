@@ -1,0 +1,19 @@
+{
+    "logo_path": "logos/x_logo.txt",
+    "modules": [
+        "os", "cpu", "gpu", "memory"
+    ],
+    "show_colors": true,
+    "icons": {
+        "os": "●",
+        "cpu": "●",
+        "gpu": "●",
+        "memory": "●"
+    },
+    "colors": {
+        "os": "Red",
+        "cpu": "Red",
+        "gpu": "Red",
+        "memory": "Red"
+    }
+}

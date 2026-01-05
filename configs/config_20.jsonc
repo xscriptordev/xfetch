@@ -1,0 +1,8 @@
+{
+    "layout": "pacman",
+    "header_icons": ["?", "?"],
+    "footer_text": "QUEST",
+    "modules": ["packages"],
+    "icons": {"packages": "?"},
+    "colors": {"packages": "Yellow"}
+}

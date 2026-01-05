@@ -1,0 +1,8 @@
+{
+    "layout": "pacman",
+    "header_icons": ["A", "B", "C"],
+    "footer_text": "ABC",
+    "modules": ["os", "shell"],
+    "icons": {"os": "A", "shell": "S"},
+    "colors": {"os": "Red", "shell": "Blue"}
+}
