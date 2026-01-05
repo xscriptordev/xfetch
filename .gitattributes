@@ -6,7 +6,7 @@
 
 # Configuration files
 *.toml linguist-language=TOML text
-*.jsonc linguist-language="JSON with Comments" text
+*.jsonc linguist-language=JSON text
 *.json linguist-language=JSON text
 Cargo.lock linguist-language=TOML text
 
