@@ -1,4 +1,4 @@
-<h1 align="center"> xfetch </h1>
+<h1 align="center"> Xfetch </h1>
 
 <p align="center">A cross-platform system information fetching tool inspired by fastfetch and neofetch, written in Rust.</p>
 
