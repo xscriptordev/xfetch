@@ -1,8 +1,9 @@
-# xfetch
+<h1 align="center"> xfetch </h1>
 
-A cross-platform system information fetching tool inspired by fastfetch and neofetch, written in Rust.
+<p align="center">A cross-platform system information fetching tool inspired by fastfetch and neofetch, written in Rust.</p>
 
-![xfetch](https://raw.githubusercontent.com/xscriptordev/xfetch/main/assets/preview.png)
+
+<p align="center"><img src="./assets/icon.png" width="200" alt="Xscriptor logo" /></p>
 
 ## Quick Install
 

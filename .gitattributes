@@ -1,0 +1,28 @@
+# Auto-detect text files and perform LF normalization
+* text=auto
+
+# Rust source code
+*.rs linguist-language=Rust text
+
+# Configuration files
+*.toml linguist-language=TOML text
+*.jsonc linguist-language="JSON with Comments" text
+*.json linguist-language=JSON text
+Cargo.lock linguist-language=TOML text
+
+# Scripts
+# Ensure shell scripts always have LF line endings
+*.sh linguist-language=Shell text eol=lf
+*.ps1 linguist-language=PowerShell text
+
+# Documentation
+*.md linguist-language=Markdown text
+LICENSE linguist-language=Text text
+
+# Assets and Logos
+*.txt linguist-language=Text text
+*.svg linguist-language=SVG text
+
+# Git configuration
+.gitignore linguist-language=Ignore-List text
+.gitattributes linguist-language=Git-Attributes text
