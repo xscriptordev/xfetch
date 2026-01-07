@@ -464,17 +464,33 @@ fn format_palette(config: &Config) -> String {
     let style = config.palette_style.as_deref().unwrap_or("squares");
     let mut s = String::new();
     
-    let colors = [40, 41, 42, 43, 44, 45, 46, 47]; // ANSI bg codes
+    // ANSI color codes (0-7 correspond to 30-37 fg, 40-47 bg)
+    let colors = [0, 1, 2, 3, 4, 5, 6, 7];
     
     match style {
         "squares" => {
             for c in colors {
-                s.push_str(&format!("\x1b[{}m  \x1b[0m ", c));
+                s.push_str(&format!("\x1b[{}m  \x1b[0m ", c + 40));
+            }
+        },
+        "circles" => {
+            for c in colors {
+                s.push_str(&format!("\x1b[{}m●\x1b[0m ", c + 30));
+            }
+        },
+        "triangles" => {
+            for c in colors {
+                s.push_str(&format!("\x1b[{}m▲\x1b[0m ", c + 30));
+            }
+        },
+        "lines" => {
+            for c in colors {
+                s.push_str(&format!("\x1b[{}m███\x1b[0m", c + 30));
             }
         },
         _ => {
              for c in colors {
-                s.push_str(&format!("\x1b[{}m  \x1b[0m ", c));
+                s.push_str(&format!("\x1b[{}m  \x1b[0m ", c + 40));
             }
         }
     }

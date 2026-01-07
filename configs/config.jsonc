@@ -81,5 +81,6 @@
         "uptime": "Magenta",
         "datetime": "Magenta",
         "palette": "White"
-    }
+    },
+    "palette_style": "circles"
 }
