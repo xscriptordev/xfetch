@@ -4,7 +4,7 @@ This document explains how to configure and customize layouts in `xfetch`.
 
 ## Built-in Layouts
 
-### 1. Default Layout (Side-by-Side)
+### 1. Default Layout (Classic)
 
 The default layout displays the logo (ASCII or image) on the left and the system information modules on the right.
 
@@ -18,7 +18,93 @@ To use this layout, simply omit the `layout` key in your config or set it to `nu
 }
 ```
 
-### 2. Pac-Man Layout
+### 2. Side Block Layout
+
+A structured layout where keys and values are displayed in two separate side-by-side boxes.
+
+**Configuration:**
+```jsonc
+{
+    "layout": "side-block"
+}
+```
+
+**Appearance:**
+```
+╭──────────╮ ╭──────────────────────╮
+│ User     │ │ jan.rex              │
+│ Host     │ │ DIO-LAPTOP           │
+╰──────────╯ ╰──────────────────────╯
+```
+
+### 3. Tree Layout
+
+Displays modules in a hierarchical tree structure. This layout supports grouping modules.
+
+**Configuration:**
+```jsonc
+{
+    "layout": "tree",
+    "modules": [
+        {
+            "type": "group",
+            "title": "OS",
+            "modules": ["os", "kernel", "packages"]
+        },
+        {
+            "type": "group",
+            "title": "PC",
+            "modules": ["cpu", "gpu", "memory"]
+        }
+    ]
+}
+```
+
+**Appearance:**
+```
+ OS
+├── os Arch Linux
+├── kernel 6.6.1
+└── packages 1200 (pacman)
+ PC
+├── cpu AMD Ryzen 9
+└── memory 16 GiB
+```
+
+### 4. Section Layout
+
+Displays modules in groups with clear section headers.
+
+**Configuration:**
+```jsonc
+{
+    "layout": "section",
+    "modules": [
+        {
+            "type": "group",
+            "title": "Hardware",
+            "modules": ["cpu", "gpu", "memory"]
+        },
+        {
+            "type": "group",
+            "title": "Software",
+            "modules": ["os", "shell"]
+        }
+    ]
+}
+```
+
+**Appearance:**
+```
+────── Hardware ──────
+│ cpu: AMD Ryzen 9
+│ memory: 16 GiB
+
+────── Software ──────
+│ os: Arch Linux
+```
+
+### 5. Pac-Man Layout
 
 A boxed layout inspired by the Pac-Man game interface.
 
@@ -31,7 +117,7 @@ A boxed layout inspired by the Pac-Man game interface.
 }
 ```
 
-### 3. Box Layout
+### 6. Box Layout
 
 Displays the system information enclosed in a simple box with rounded corners.
 
@@ -42,22 +128,9 @@ Displays the system information enclosed in a simple box with rounded corners.
 }
 ```
 
-**Appearance:**
-```
-                         ╭──────────────────────────────╮
-      \\\      ///       │  Ubuntu 24.04               
-       \\\    ///        │  6.6.87                     
-        \\\  ///         │  756 (dpkg)                 
-         \\///           │  zsh                        
-         ///\\           │  4.50 GiB / 16.00 GiB       
-        ///  \\\         │                              
-       ///    \\\        │                              
-      ///      \\\       ╰──────────────────────────────╯
-```
+### 7. Line Layout
 
-### 4. Line Layout
-
-Displays system information with a horizontal separator line after every 3 modules. Useful for grouping related information.
+Displays system information with a horizontal separator line after every 3 modules.
 
 **Configuration:**
 ```jsonc
@@ -66,21 +139,9 @@ Displays system information with a horizontal separator line after every 3 modul
 }
 ```
 
-**Appearance:**
-```
-      \\\      ///        Ubuntu 24.04
-       \\\    ///         6.6.87
-        \\\  ///          756 (dpkg)
-         \\///           ──────────────────────────────
-         ///\\            zsh
-        ///  \\\          4.50 GiB / 16.00 GiB
-       ///    \\\        
-      ///      \\\       
-```
+### 8. Dots Layout
 
-### 5. Dots Layout
-
-Similar to the Line layout, but uses dots as separators between groups of 3 modules.
+Similar to the Line layout, but uses dots as separators.
 
 **Configuration:**
 ```jsonc
@@ -89,19 +150,7 @@ Similar to the Line layout, but uses dots as separators between groups of 3 modu
 }
 ```
 
-**Appearance:**
-```
-      \\\      ///        Ubuntu 24.04
-       \\\    ///         6.6.87
-        \\\  ///          756 (dpkg)
-         \\///           ..............................
-         ///\\            zsh
-        ///  \\\          4.50 GiB / 16.00 GiB
-       ///    \\\        
-      ///      \\\       
-```
-
-### 6. Bottom Line Layout
+### 9. Bottom Line Layout
 
 A minimal layout that adds a single horizontal line at the very bottom of the information list.
 
@@ -112,20 +161,24 @@ A minimal layout that adds a single horizontal line at the very bottom of the in
 }
 ```
 
-**Appearance:**
+## Module Grouping
+
+For `tree` and `section` layouts, you can define groups in the `modules` list:
+
+```jsonc
+"modules": [
+    // Simple module
+    "uptime",
+    
+    // Group
+    {
+        "type": "group",
+        "title": "Group Title",
+        "modules": [
+            "os",
+            "kernel"
+            // You can nest groups too!
+        ]
+    }
+]
 ```
-      \\\      ///        Ubuntu 24.04
-       \\\    ///         6.6.87
-        \\\  ///          756 (dpkg)
-         \\///            zsh
-         ///\\            4.50 GiB / 16.00 GiB
-        ///  \\\         ──────────────────────────────
-       ///    \\\        
-      ///      \\\       
-```
-
-## Creating Custom Layouts
-
-Currently, `xfetch` supports the predefined layouts mentioned above. However, you can customize components like header icons and footer text within supported layouts (like `pacman`).
-
-Check the `CONFIGURATION.md` for full details on how to configure modules and colors.

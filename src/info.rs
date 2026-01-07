@@ -2,6 +2,7 @@ use sysinfo::{
     Components, Disks, Networks, System,
 };
 use std::env;
+#[cfg(target_os = "linux")]
 use std::fs;
 use std::process::Command;
 
@@ -20,6 +21,9 @@ pub struct Info {
     pub uptime: String,
     pub packages: String,
     pub desktop: String,
+    pub user: String,
+    pub datetime: String,
+    pub local_ip: String,
 }
 
 impl Info {
@@ -27,7 +31,7 @@ impl Info {
         let mut sys = System::new_all();
         sys.refresh_all();
         let disks = Disks::new_with_refreshed_list();
-        let _networks = Networks::new_with_refreshed_list();
+        let networks = Networks::new_with_refreshed_list();
         let components = Components::new_with_refreshed_list();
 
         Self {
@@ -45,6 +49,9 @@ impl Info {
             uptime: get_uptime_info(),
             packages: get_packages_info(),
             desktop: get_desktop_info(),
+            user: get_user_info(),
+            datetime: get_datetime_info(),
+            local_ip: get_local_ip_info(&networks),
         }
     }
 }
@@ -58,7 +65,6 @@ fn get_os_info() -> String {
 
 fn get_kernel_info() -> String {
     let version = System::kernel_version().unwrap_or("Unknown".to_string());
-    // On Windows it might be different, but sysinfo handles it usually
     format!("{}", version)
 }
 
@@ -67,14 +73,12 @@ fn get_host_name() -> String {
 }
 
 fn get_shell_info() -> String {
-    // Simple env var check
     if let Ok(shell) = env::var("SHELL") {
         let path = std::path::Path::new(&shell);
         if let Some(name) = path.file_name() {
             return name.to_string_lossy().into_owned();
         }
     }
-    // Windows fallback
     if cfg!(target_os = "windows") {
         if env::var("PSModulePath").is_ok() {
             return "PowerShell".to_string();
@@ -105,22 +109,16 @@ fn get_cpu_info(sys: &System) -> String {
     let brand = cpus[0].brand();
     let freq = cpus[0].frequency(); // MHz
     let cores = cpus.len();
-    
-    // Format: Brand (Cores) @ Freq
     format!("{} ({}) @ {:.2} GHz", brand, cores, freq as f64 / 1000.0)
 }
 
 fn get_gpu_info() -> Vec<String> {
     let mut gpus = Vec::new();
-    
-    // Quick hack for Linux
     if cfg!(target_os = "linux") {
         if let Ok(output) = Command::new("lspci").arg("-mm").output() {
             let out = String::from_utf8_lossy(&output.stdout);
             for line in out.lines() {
                 if line.contains("VGA") || line.contains("3D") || line.contains("Display") {
-                     // Parse lspci -mm output is roughly: "Slot" "Class" "Vendor" "Device"
-                     // We just want a rough string for now
                      let parts: Vec<&str> = line.split('"').collect();
                      if parts.len() > 5 {
                          gpus.push(parts[5].to_string());
@@ -129,11 +127,10 @@ fn get_gpu_info() -> Vec<String> {
             }
         }
     }
-    // Windows
     else if cfg!(target_os = "windows") {
         if let Ok(output) = Command::new("wmic").args(&["path", "win32_videocontroller", "get", "name"]).output() {
             let out = String::from_utf8_lossy(&output.stdout);
-            for line in out.lines().skip(1) { // Skip header
+            for line in out.lines().skip(1) {
                 let trimmed = line.trim();
                 if !trimmed.is_empty() {
                     gpus.push(trimmed.to_string());
@@ -141,7 +138,6 @@ fn get_gpu_info() -> Vec<String> {
             }
         }
     }
-    // MacOS
     else if cfg!(target_os = "macos") {
         if let Ok(output) = Command::new("system_profiler").arg("SPDisplaysDataType").output() {
              let out = String::from_utf8_lossy(&output.stdout);
@@ -152,7 +148,6 @@ fn get_gpu_info() -> Vec<String> {
              }
         }
     }
-
     if gpus.is_empty() {
         gpus.push("Unknown GPU".to_string());
     }
@@ -160,7 +155,7 @@ fn get_gpu_info() -> Vec<String> {
 }
 
 fn get_memory_info(sys: &System) -> String {
-    let total = sys.total_memory() as f64 / 1024.0 / 1024.0 / 1024.0; // GiB
+    let total = sys.total_memory() as f64 / 1024.0 / 1024.0 / 1024.0;
     let used = sys.used_memory() as f64 / 1024.0 / 1024.0 / 1024.0;
     let percent = (used / total) * 100.0;
     format!("{:.2} GiB / {:.2} GiB ({:.0}%)", used, total, percent)
@@ -184,25 +179,20 @@ fn get_disk_info(disks: &Disks) -> Vec<String> {
         let used = total - available;
         let percent = (used / total) * 100.0;
         let fs = disk.file_system().to_str().unwrap_or("Unknown");
-        // Windows often has many disks, maybe filter by fixed?
-        // sysinfo disks usually includes fixed.
         disk_list.push(format!("{:.2} GiB / {:.2} GiB ({:.0}%) - {}", used, total, percent, fs));
     }
     disk_list
 }
 
 fn get_battery_info(_components: &Components) -> String {
-    // sysinfo Components sometimes has battery, but usually better to use a crate or /sys/class/power_supply
-    // For now, simple placeholder or check /sys/class
     #[cfg(target_os = "linux")]
     {
-        // Simple check
         if let Ok(cap) = fs::read_to_string("/sys/class/power_supply/BAT0/capacity") {
             let status = fs::read_to_string("/sys/class/power_supply/BAT0/status").unwrap_or("Unknown".to_string());
             return format!("{}% [{}]", cap.trim(), status.trim());
         }
     }
-    "100% [AC Connected]".to_string() // Fallback
+    "100% [AC Connected]".to_string()
 }
 
 fn get_uptime_info() -> String {
@@ -213,8 +203,6 @@ fn get_uptime_info() -> String {
 }
 
 fn get_packages_info() -> String {
-    // Count packages
-    // Linux: check pacman, dpkg, etc.
     if cfg!(target_os = "linux") {
         if let Ok(output) = Command::new("pacman").arg("-Qq").output() {
             if output.status.success() {
@@ -226,25 +214,23 @@ fn get_packages_info() -> String {
              if output.status.success() {
                  let count = String::from_utf8_lossy(&output.stdout).lines().count();
                  return format!("{} (dpkg)", count);
-             }
+            }
         }
     }
-    // Windows
     if cfg!(target_os = "windows") {
         if let Ok(output) = Command::new("scoop").arg("list").output() {
              if output.status.success() {
-                 let count = String::from_utf8_lossy(&output.stdout).lines().count().saturating_sub(4); // scoop header
+                 let count = String::from_utf8_lossy(&output.stdout).lines().count().saturating_sub(4);
                  return format!("{} (scoop)", count);
-             }
+            }
         }
     }
-    // MacOS
     if cfg!(target_os = "macos") {
         if let Ok(output) = Command::new("brew").arg("list").arg("--formula").output() {
              if output.status.success() {
                  let count = String::from_utf8_lossy(&output.stdout).lines().count();
                  return format!("{} (brew)", count);
-             }
+            }
         }
     }
     "Unknown".to_string()
@@ -264,4 +250,34 @@ fn get_desktop_info() -> String {
         return "Aqua".to_string();
     }
     "Unknown".to_string()
+}
+
+fn get_user_info() -> String {
+    env::var("USER").unwrap_or_else(|_| "Unknown".to_string())
+}
+
+fn get_datetime_info() -> String {
+    if cfg!(target_os = "windows") {
+        if let Ok(output) = Command::new("powershell").arg("-Command").arg("Get-Date -Format 'yyyy-MM-dd HH:mm:ss'").output() {
+             return String::from_utf8_lossy(&output.stdout).trim().to_string();
+        }
+    } else {
+        if let Ok(output) = Command::new("date").arg("+%Y-%m-%d %H:%M:%S").output() {
+            return String::from_utf8_lossy(&output.stdout).trim().to_string();
+        }
+    }
+    "Unknown".to_string()
+}
+
+fn get_local_ip_info(networks: &Networks) -> String {
+    for (_name, data) in networks {
+        for ip in data.ip_networks() {
+             if let std::net::IpAddr::V4(ipv4) = ip.addr {
+                 if !ipv4.is_loopback() {
+                     return ipv4.to_string();
+                 }
+             }
+        }
+    }
+    "127.0.0.1".to_string()
 }

@@ -1,0 +1,67 @@
+{
+    "layout": "section",
+    "modules": [
+        {
+            "type": "group",
+            "title": "Hardware",
+            "modules": [
+                "hostname",
+                "cpu",
+                "gpu",
+                "memory",
+                "disk"
+            ]
+        },
+        {
+            "type": "group",
+            "title": "Software",
+            "modules": [
+                "os",
+                "kernel",
+                "packages",
+                "shell",
+                "wm",
+                "terminal"
+            ]
+        },
+        {
+            "type": "group",
+            "title": "Uptime / Age / DT",
+            "modules": [
+                "uptime",
+                "datetime"
+            ]
+        }
+    ],
+    "show_colors": true,
+    "icons": {
+        "hostname": "PC",
+        "cpu": "",
+        "gpu": "󰍹",
+        "memory": "",
+        "disk": "󰋊",
+        "os": "OS",
+        "kernel": "",
+        "packages": "",
+        "shell": "",
+        "wm": "DE",
+        "terminal": "",
+        "uptime": "Uptime",
+        "datetime": "DateTime"
+    },
+    "colors": {
+        "hostname": "Green",
+        "cpu": "Green",
+        "gpu": "Green",
+        "memory": "Green",
+        "disk": "Green",
+        "os": "Yellow",
+        "kernel": "Yellow",
+        "packages": "Yellow",
+        "shell": "Yellow",
+        "wm": "Blue",
+        "terminal": "Blue",
+        "uptime": "Magenta",
+        "datetime": "Magenta"
+    }
+}

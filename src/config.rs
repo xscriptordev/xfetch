@@ -7,11 +7,21 @@ use std::io::Read;
 use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(untagged)]
+pub enum ModuleConfig {
+    Simple(String),
+    Group {
+        title: String,
+        modules: Vec<ModuleConfig>, // Recursive
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(default)]
 pub struct Config {
     pub ascii: Option<String>,
     pub logo_path: Option<String>,
-    pub modules: Vec<String>,
+    pub modules: Vec<ModuleConfig>, // Changed from Vec<String>
     pub show_colors: bool,
     pub icons: HashMap<String, String>,
     pub colors: HashMap<String, String>,
@@ -49,17 +59,17 @@ impl Default for Config {
             ascii: None,
             logo_path: None,
             modules: vec![
-                "os".to_string(),
-                "kernel".to_string(),
-                "uptime".to_string(),
-                "packages".to_string(),
-                "wm".to_string(),
-                "shell".to_string(),
-                "disk".to_string(),
-                "cpu".to_string(),
-                "gpu".to_string(),
-                "memory".to_string(),
-                "battery".to_string(),
+                ModuleConfig::Simple("os".to_string()),
+                ModuleConfig::Simple("kernel".to_string()),
+                ModuleConfig::Simple("uptime".to_string()),
+                ModuleConfig::Simple("packages".to_string()),
+                ModuleConfig::Simple("wm".to_string()),
+                ModuleConfig::Simple("shell".to_string()),
+                ModuleConfig::Simple("disk".to_string()),
+                ModuleConfig::Simple("cpu".to_string()),
+                ModuleConfig::Simple("gpu".to_string()),
+                ModuleConfig::Simple("memory".to_string()),
+                ModuleConfig::Simple("battery".to_string()),
             ],
             show_colors: true,
             icons,
