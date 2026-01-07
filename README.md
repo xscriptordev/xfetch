@@ -5,6 +5,34 @@
 
 <p align="center"><img src="./assets/icon.png" width="200" alt="Xscriptor logo" /></p>
 
+# Previews
+
+<p align="center">
+  <a href="./assets/previews/preview0.jpg">
+    <img src="./assets/previews/preview0.jpg" alt="Main preview" width="850"/>
+  </a>
+</p>
+
+<details>
+  <summary>More previews</summary>
+
+  <table>
+    <tr>
+      <td align="center">
+        <a href="./assets/previews/preview1.png">
+          <img src="./assets/previews/preview1.png" alt="Preview 2" width="380"/>
+        </a>
+      </td>
+      <td align="center">
+        <a href="./assets/previews/preview2.jpg">
+          <img src="./assets/previews/preview2.jpg" alt="Preview 3" width="380"/>
+        </a>
+      </td>
+    </tr>
+  </table>
+</details>
+
+
 ## Quick Install
 
 ### Linux / macOS
