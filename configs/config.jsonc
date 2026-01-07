@@ -57,7 +57,10 @@
         "user": "",
         "uptime": "󰔛",
         "datetime": "",
-        "palette": "🎨"
+        "palette": "",
+        "hardware": "",
+        "software": "",
+        "session": ""
     },
     "colors": {
         "hostname": "Green",

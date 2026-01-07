@@ -68,7 +68,10 @@ pub fn draw(info: &Info, config: &Config) {
     }
 
     if !image_printed && !ascii_lines.is_empty() {
-        ascii_width = ascii_lines.iter().map(|l| l.len()).max().unwrap_or(0);
+        // Trim trailing spaces from ascii lines to avoid excessive width
+        ascii_lines = ascii_lines.into_iter().map(|l| l.trim_end().to_string()).collect();
+        // Use console::measure_text_width to get accurate display width (handling wide chars correctly)
+        ascii_width = ascii_lines.iter().map(|l| console::measure_text_width(l)).max().unwrap_or(0);
     }
 
     // Render content to lines based on layout
@@ -97,12 +100,19 @@ pub fn draw(info: &Info, config: &Config) {
             };
             let is_custom_ascii = config.ascii.is_some() || config.logo_path.is_some();
             if is_custom_ascii {
-                 execute!(stdout, Print(format!("{:<width$}", ascii_line, width = ascii_width))).unwrap();
+                 // Calculate padding needed: width - visible_width(ascii_line)
+                 let visible_len = console::measure_text_width(ascii_line);
+                 let padding = if ascii_width > visible_len { ascii_width - visible_len } else { 0 };
+                 execute!(stdout, Print(format!("{}{}", ascii_line, " ".repeat(padding)))).unwrap();
             } else {
+                 // Calculate padding needed
+                 let visible_len = console::measure_text_width(ascii_line);
+                 let padding = if ascii_width > visible_len { ascii_width - visible_len } else { 0 };
+                 
                  execute!(
                     stdout,
                     SetForegroundColor(Color::Rgb { r: 255, g: 165, b: 0 }),
-                    Print(format!("{:<width$}", ascii_line, width = ascii_width)),
+                    Print(format!("{}{}", ascii_line, " ".repeat(padding))),
                     ResetColor
                 ).unwrap();
             }
@@ -386,8 +396,9 @@ fn render_section(nodes: &[RenderNode], config: &Config) -> Vec<String> {
                          
                          let key_color = get_color_code(key, config);
                          lines.push(format!(
-                             "\x1b[38;5;240m│\x1b[0m \x1b[{}m{}:\x1b[0m {}", 
+                             "\x1b[38;5;240m│\x1b[0m \x1b[{}m{} {}:\x1b[0m {}", 
                              key_color,
+                             icon,
                              key, 
                              value
                          ));
