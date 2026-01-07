@@ -27,9 +27,13 @@
                 "cpu",
                 "gpu",
                 "uptime",
-                "memory"
+                "memory",
+                "disk",
+                "battery",
+                "local_ip"
             ]
-        }
+        },
+        "palette"
     ],
     "show_colors": true,
     "icons": {
@@ -43,7 +47,11 @@
         "cpu": "",
         "gpu": "󰍹",
         "uptime": "󰔛",
-        "memory": ""
+        "memory": "",
+        "disk": "󰋊",
+        "battery": "",
+        "local_ip": "󰩟",
+        "palette": "🎨"
     },
     "colors": {
         "os": "Cyan",
@@ -58,6 +66,10 @@
         "cpu": "White",
         "gpu": "White",
         "uptime": "White",
-        "memory": "White"
+        "memory": "White",
+        "disk": "White",
+        "battery": "White",
+        "local_ip": "White",
+        "palette": "White"
     }
 }

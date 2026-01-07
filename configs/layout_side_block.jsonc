@@ -13,7 +13,8 @@
         "disk",
         "terminal",
         "shell",
-        "local_ip"
+        "local_ip",
+        "palette"
     ],
     "show_colors": true,
     "icons": {
@@ -29,7 +30,8 @@
         "disk": "Disk",
         "terminal": "Terminal",
         "shell": "Shell",
-        "local_ip": "Local IP"
+        "local_ip": "Local IP",
+        "palette": "Palette"
     },
     "colors": {
         "user": "Green",
@@ -44,6 +46,7 @@
         "disk": "Magenta",
         "terminal": "Cyan",
         "shell": "Cyan",
-        "local_ip": "Blue"
+        "local_ip": "Blue",
+        "palette": "White"
     }
 }

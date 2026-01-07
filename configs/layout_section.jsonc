@@ -9,7 +9,8 @@
                 "cpu",
                 "gpu",
                 "memory",
-                "disk"
+                "disk",
+                "battery"
             ]
         },
         {
@@ -21,7 +22,8 @@
                 "packages",
                 "shell",
                 "wm",
-                "terminal"
+                "terminal",
+                "local_ip"
             ]
         },
         {
@@ -29,9 +31,11 @@
             "title": "Uptime / Age / DT",
             "modules": [
                 "uptime",
-                "datetime"
+                "datetime",
+                "user"
             ]
-        }
+        },
+        "palette"
     ],
     "show_colors": true,
     "icons": {
@@ -40,14 +44,18 @@
         "gpu": "󰍹",
         "memory": "",
         "disk": "󰋊",
+        "battery": "",
         "os": "OS",
         "kernel": "",
         "packages": "",
         "shell": "",
         "wm": "DE",
         "terminal": "",
+        "local_ip": "IP",
         "uptime": "Uptime",
-        "datetime": "DateTime"
+        "datetime": "DateTime",
+        "user": "User",
+        "palette": "Colors"
     },
     "colors": {
         "hostname": "Green",
@@ -55,13 +63,17 @@
         "gpu": "Green",
         "memory": "Green",
         "disk": "Green",
+        "battery": "Green",
         "os": "Yellow",
         "kernel": "Yellow",
         "packages": "Yellow",
         "shell": "Yellow",
         "wm": "Blue",
         "terminal": "Blue",
+        "local_ip": "Blue",
         "uptime": "Magenta",
-        "datetime": "Magenta"
+        "datetime": "Magenta",
+        "user": "Magenta",
+        "palette": "White"
     }
 }

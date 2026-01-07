@@ -182,3 +182,36 @@ For `tree` and `section` layouts, you can define groups in the `modules` list:
     }
 ]
 ```
+
+## Available Modules
+
+- `os`: Operating System
+- `kernel`: Kernel version
+- `hostname`: Hostname
+- `user`: Current username
+- `datetime`: Current date and time
+- `uptime`: System uptime
+- `packages`: Package count
+- `shell`: Current shell
+- `terminal`: Current terminal emulator
+- `wm`: Window Manager / Desktop Environment
+- `cpu`: CPU information
+- `gpu`: GPU information
+- `memory`: RAM usage
+- `swap`: Swap usage
+- `disk`: Disk usage
+- `battery`: Battery status
+- `local_ip`: Local IP address
+- `palette`: Color palette
+
+## Icons
+
+We recommend using [Nerd Fonts](https://www.nerdfonts.com/) for icons to ensure they render correctly. You can customize icons in the `icons` section of your config file.
+
+```jsonc
+"icons": {
+    "os": "",
+    "cpu": "",
+    // ...
+}
+```

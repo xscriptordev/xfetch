@@ -5,6 +5,7 @@ use crossterm::execute;
 use std::io::stdout;
 use viuer::{print_from_file, Config as ViuerConfig};
 use std::path::PathBuf;
+use console::strip_ansi_codes;
 
 fn expand_path(path: &str) -> PathBuf {
     if path.starts_with("~") {
@@ -19,7 +20,6 @@ fn expand_path(path: &str) -> PathBuf {
 enum RenderNode {
     Line { key: String, value: String, icon: String },
     Group { title: String, children: Vec<RenderNode> },
-    Separator(String),
 }
 
 pub fn draw(info: &Info, config: &Config) {
@@ -122,10 +122,17 @@ fn prepare_render_tree(info: &Info, modules: &[ModuleConfig], config: &Config) -
     for module in modules {
         match module {
             ModuleConfig::Simple(key) => {
-                let val = get_module_value(info, key);
-                if let Some(v) = val {
-                    let icon = config.icons.get(key).cloned().unwrap_or("●".to_string());
-                    nodes.push(RenderNode::Line { key: key.clone(), value: v, icon });
+                if key == "palette" {
+                    let val = format_palette(config);
+                    // Icon for palette is optional, can be "Colors" or empty string if user wants no icon
+                    let icon = config.icons.get(key).cloned().unwrap_or("🎨".to_string());
+                    nodes.push(RenderNode::Line { key: key.clone(), value: val, icon });
+                } else {
+                    let val = get_module_value(info, key);
+                    if let Some(v) = val {
+                        let icon = config.icons.get(key).cloned().unwrap_or("●".to_string());
+                        nodes.push(RenderNode::Line { key: key.clone(), value: v, icon });
+                    }
                 }
             },
             ModuleConfig::Group { title, modules } => {
@@ -164,7 +171,7 @@ fn get_module_value(info: &Info, key: &str) -> Option<String> {
         "user" => Some(info.user.clone()),
         "datetime" => Some(info.datetime.clone()),
         "local_ip" => Some(info.local_ip.clone()),
-        "palette" => Some("palette".to_string()),
+        "palette" => None, // Handled in prepare_render_tree
         "header" => Some(format!("{}@{}", info.user, info.host_name)), // Custom module for header
         "sep" => Some("---".to_string()),
         _ => None,
@@ -189,31 +196,77 @@ fn render_classic(nodes: &[RenderNode], config: &Config) -> Vec<String> {
                      }
                 }
             },
-            RenderNode::Separator(s) => lines.push(s.clone()),
         }
     }
     lines
 }
 
 fn render_classic_variants(nodes: &[RenderNode], config: &Config, variant: &str) -> Vec<String> {
-    // Similar to classic but with specific borders
-    // Simplified: Just reuse old logic but operating on string buffer
     let mut lines = Vec::new();
     let flat_items = flatten_nodes(nodes);
     
     match variant {
         "box" => {
-            lines.push("╭──────────────────────────────╮".to_string());
+             let max_len = flat_items.iter().map(|(k, v, i)| {
+                let content = format_line_content(k, v, i, config);
+                strip_ansi_codes(&content).chars().count()
+            }).max().unwrap_or(0);
+            
+            let border_len = max_len + 2; // +2 for padding space
+            lines.push(format!("╭{}╮", "─".repeat(border_len)));
+            
             for (key, val, icon) in flat_items {
-                let line_content = format_line_content(&key, &val, &icon, config);
-                lines.push(format!("│ {:<28} │", line_content)); // Primitive padding
+                let content = format_line_content(&key, &val, &icon, config);
+                let visual_len = strip_ansi_codes(&content).chars().count();
+                let padding = max_len - visual_len;
+                lines.push(format!("│ {} {}│", content, " ".repeat(padding)));
             }
-            lines.push("╰──────────────────────────────╯".to_string());
+            lines.push(format!("╰{}╯", "─".repeat(border_len)));
         },
         "pacman" => {
-             // ... Implement pacman logic if needed, skipping for brevity as user wants new layouts
-             // Fallback to classic for now to save space, user asked for new layouts
-             return render_classic(nodes, config);
+             // Header
+            let icons = config.header_icons.as_ref().map(|v| v.clone()).unwrap_or_default();
+            let mut header = String::from("\x1b[32m╭─ \x1b[0m");
+            for (idx, icon) in icons.iter().enumerate() {
+                let color = match idx % 5 {
+                     0 => "33", // Yellow
+                     1 => "31", // Red
+                     2 => "35", // Magenta
+                     3 => "36", // Cyan
+                     4 => "33", // Orange-ish
+                     _ => "37",
+                };
+                header.push_str(&format!("\x1b[{}m{} \x1b[0m", color, icon));
+            }
+            header.push_str("\x1b[32m────────────────╮\x1b[0m");
+            lines.push(header);
+            
+            // Content
+            for (key, val, icon) in flat_items {
+                 lines.push(format_line(&key, &val, &icon, config));
+            }
+            
+            // Footer
+            let footer_text = config.footer_text.as_deref().unwrap_or("X");
+             lines.push(format!(
+                "\x1b[32m╰────────── \x1b[37m{}\x1b[32m ──────────╯\x1b[0m", 
+                footer_text
+            ));
+        },
+        "line" | "dots" => {
+            for (idx, (key, val, icon)) in flat_items.iter().enumerate() {
+                lines.push(format_line(key, val, icon, config));
+                if (idx + 1) % 3 == 0 && idx != flat_items.len() - 1 {
+                     let sep = if variant == "line" { "──────────────────────────────" } else { ".............................." };
+                     lines.push(format!("\x1b[90m{}\x1b[0m", sep));
+                }
+            }
+        },
+        "bottom_line" => {
+             for (key, val, icon) in flat_items {
+                lines.push(format_line(&key, &val, &icon, config));
+            }
+            lines.push("\x1b[37m──────────────────────────────\x1b[0m".to_string());
         },
         _ => return render_classic(nodes, config),
     }
@@ -225,10 +278,10 @@ fn render_side_block(nodes: &[RenderNode], config: &Config) -> Vec<String> {
     let mut lines = Vec::new();
     let flat_items = flatten_nodes(nodes);
     
-    // Calculate max key length
-    let max_key_len = flat_items.iter().map(|(k, _, _)| k.len()).max().unwrap_or(0);
+    // Calculate max key length (use icon as label)
+    let max_key_len = flat_items.iter().map(|(_, _, icon)| strip_ansi_codes(icon).chars().count()).max().unwrap_or(0);
     // Calculate max val length
-    let max_val_len = flat_items.iter().map(|(_, v, _)| v.len()).max().unwrap_or(0);
+    let max_val_len = flat_items.iter().map(|(_, v, _)| strip_ansi_codes(v).chars().count()).max().unwrap_or(0);
 
     let left_width = max_key_len + 2;
     let right_width = max_val_len + 2;
@@ -242,15 +295,20 @@ fn render_side_block(nodes: &[RenderNode], config: &Config) -> Vec<String> {
     );
     lines.push(top);
 
-    for (key, val, _icon) in flat_items {
+    for (key, val, icon) in flat_items {
         // Color key based on config or rainbow
         let color_code = get_color_code(&key, config);
-        let key_str = format!("\x1b[{}m{:<width$}\x1b[0m", color_code, key, width = max_key_len);
+        // Use icon as label text!
+        let key_str = format!("\x1b[{}m{:<width$}\x1b[0m", color_code, icon, width = max_key_len);
         
+        let val_stripped_len = strip_ansi_codes(&val).chars().count();
+        let padding = max_val_len - val_stripped_len;
+
         let line = format!(
-            "\x1b[38;5;2m│\x1b[0m {} \x1b[38;5;2m│\x1b[0m \x1b[38;5;2m│\x1b[0m {} \x1b[38;5;2m│\x1b[0m",
+            "\x1b[38;5;2m│\x1b[0m {} \x1b[38;5;2m│\x1b[0m \x1b[38;5;2m│\x1b[0m {}{} \x1b[38;5;2m│\x1b[0m",
             key_str,
-            format!("{:<width$}", val, width = max_val_len)
+            val,
+            " ".repeat(padding)
         );
         lines.push(line);
     }
@@ -301,7 +359,6 @@ fn render_tree(nodes: &[RenderNode], config: &Config) -> Vec<String> {
                 // Top level item
                  lines.push(format_line(key, value, icon, config));
             },
-            _ => {}
         }
     }
     lines
@@ -325,7 +382,7 @@ fn render_section(nodes: &[RenderNode], config: &Config) -> Vec<String> {
                          // Image 3 uses: L: ...
                          // Image 4 uses tree style: ├──
                          // Let's use tree style
-                         let icon_display = if icon == "●" { "└" } else { icon }; // Use icon if specific, else tree
+                         let _icon_display = if icon == "●" { "└" } else { icon }; // Use icon if specific, else tree
                          
                          let key_color = get_color_code(key, config);
                          lines.push(format!(
@@ -341,7 +398,6 @@ fn render_section(nodes: &[RenderNode], config: &Config) -> Vec<String> {
              RenderNode::Line { key, value, icon } => {
                  lines.push(format_line(key, value, icon, config));
             },
-            _ => {}
         }
     }
     lines
@@ -357,17 +413,12 @@ fn flatten_nodes(nodes: &[RenderNode]) -> Vec<(String, String, String)> {
                 let mut child_items = flatten_nodes(children);
                 items.append(&mut child_items);
             },
-            _ => {}
         }
     }
     items
 }
 
 fn format_line(key: &str, value: &str, icon: &str, config: &Config) -> String {
-    if key == "palette" {
-        return format_palette(config);
-    }
-    
     let color_code = get_color_code(key, config);
     format!(
         "\x1b[{}m{} \x1b[0m{}", 
@@ -378,9 +429,6 @@ fn format_line(key: &str, value: &str, icon: &str, config: &Config) -> String {
 }
 
 fn format_line_content(key: &str, value: &str, icon: &str, config: &Config) -> String {
-    if key == "palette" {
-        return format_palette(config);
-    }
     let color_code = get_color_code(key, config);
     format!("\x1b[{}m{} \x1b[0m{}", color_code, icon, value)
 }
@@ -424,14 +472,20 @@ fn format_palette(config: &Config) -> String {
 
 fn get_default_ascii() -> String {
     r#"
-      \\\      ///
-       \\\    ///
-        \\\  ///
-         \\///
-         ///\\
-        ///  \\\
-       ///    \\\
-      ///      \\\
+████████           ████████
+ ████████         ████████
+  ████████       ████████
+   ████████     ████████
+    ████████   ████████
+     ████████ ████████
+      ███████████████
+       █████████████
+      ███████████████
+     ████████ ████████
+    ████████   ████████
+   ████████     ████████
+  ████████       ████████
+ ████████         ████████
+████████           ████████
 "#.trim().to_string()
 }
-

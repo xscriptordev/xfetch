@@ -1,0 +1,52 @@
+{
+    "layout": "dots",
+    "modules": [
+        "os",
+        "kernel",
+        "uptime",
+        "packages",
+        "shell",
+        "terminal",
+        "wm",
+        "cpu",
+        "gpu",
+        "memory",
+        "disk",
+        "battery",
+        "local_ip",
+        "palette"
+    ],
+    "show_colors": true,
+    "icons": {
+        "os": "",
+        "kernel": "",
+        "uptime": "󰔛",
+        "packages": "",
+        "shell": "",
+        "terminal": "",
+        "wm": "",
+        "cpu": "",
+        "gpu": "󰍹",
+        "memory": "",
+        "disk": "󰋊",
+        "battery": "",
+        "local_ip": "󰩟",
+        "palette": "🎨"
+    },
+    "colors": {
+        "os": "Green",
+        "kernel": "Green",
+        "uptime": "Green",
+        "packages": "Blue",
+        "shell": "Blue",
+        "terminal": "Blue",
+        "wm": "Red",
+        "cpu": "Red",
+        "gpu": "Red",
+        "memory": "Yellow",
+        "disk": "Yellow",
+        "battery": "Yellow",
+        "local_ip": "Cyan",
+        "palette": "White"
+    }
+}
