@@ -111,7 +111,7 @@ pub fn draw(info: &Info, config: &Config) {
                  
                  execute!(
                     stdout,
-                    SetForegroundColor(Color::Rgb { r: 255, g: 165, b: 0 }),
+                    SetForegroundColor(Color::Rgb { r: 128, g: 128, b: 128 }),
                     Print(format!("{}{}", ascii_line, " ".repeat(padding))),
                     ResetColor
                 ).unwrap();
