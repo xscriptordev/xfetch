@@ -51,6 +51,37 @@ For Windows, download the installer from [rust-lang.org](https://www.rust-lang.o
     cargo install --path .
     ```
 
+### Using PKGBUILD (Recommended)
+
+This method installs xfetch as a proper Arch package, making it easy to update and remove.
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/xscriptordev/xfetch.git
+    cd xfetch
+    ```
+
+2.  **Build and install the package**:
+    ```bash
+    makepkg -si
+    ```
+    This will:
+    - Download dependencies automatically
+    - Build the package from source
+    - Install it system-wide to `/usr/bin/xfetch`
+
+3.  **Verify installation**:
+    ```bash
+    xfetch
+    ```
+
+> **Note:** Config examples and logos are installed to `/usr/share/xfetch/`.
+
+To uninstall:
+```bash
+sudo pacman -R xfetch-git
+```
+
 ---
 
 ## macOS
