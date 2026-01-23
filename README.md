@@ -1,6 +1,12 @@
 <h1 align="center"> Xfetch </h1>
 
-<p align="center">A cross-platform system information fetching tool inspired by fastfetch and neofetch, written in Rust.</p>
+<dev align="center">
+
+![xfetch](https://xscriptordev.github.io/badges/software/xfetch.svg) ![linux](https://xscriptordev.github.io/badges/os/linux.svg) ![macos](https://xscriptordev.github.io/badges/os/macos.svg) ![windows](https://xscriptordev.github.io/badges/os/windows.svg) ![rust](https://xscriptordev.github.io/badges/languages/rust.svg) ![mit](https://xscriptordev.github.io/badges/licenses/mit.svg)
+
+A cross-platform system information fetching tool inspired by fastfetch and neofetch, written in Rust.
+
+</dev>
 
 
 <p align="center"><img src="./assets/icon.png" width="200" alt="Xscriptor logo" /></p>
