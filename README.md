@@ -9,7 +9,7 @@ A cross-platform system information fetching tool inspired by fastfetch and neof
 </dev>
 
 
-<p align="center"><img src="./assets/icon.png" width="200" alt="Xscriptor logo" /></p>
+<p align="center"><img src="./assets/icon.png" width="100" alt="Xscriptor logo" /></p>
 
 # Previews
 
