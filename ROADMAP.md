@@ -1,6 +1,6 @@
 # xfetch Roadmap
 
-## Phase 1 · Foundation & Core ✓
+## Phase 1 · Foundation & Core
 <!-- phase:phase-1:foundation -->
 
 - [x] Initialize Rust project with dependencies
@@ -9,7 +9,7 @@
 - [x] Implement configuration system with JSONC support
 - [x] Build UI rendering engine with crossterm
 
-## Phase 2 · System Information Modules ✓
+## Phase 2 · System Information Modules
 <!-- phase:phase-2:system-modules -->
 
 - [x] OS Name & Architecture display
@@ -26,7 +26,7 @@
 - [x] Package count for multiple managers (pacman, dpkg, scoop)
 - [x] Desktop Environment / Window Manager detection
 
-## Phase 3 · Visual Customization & Layouts ✓
+## Phase 3 · Visual Customization & Layouts
 <!-- phase:phase-3:visual-features -->
 
 - [x] Custom ASCII art support from text files
@@ -41,7 +41,7 @@
 - [x] Section layout for grouped information
 - [x] Color palette display with style options
 
-## Phase 4 · Documentation & Examples ✓
+## Phase 4 · Documentation & Examples
 <!-- phase:phase-4:documentation -->
 
 - [x] Installation guide (INSTALLATION.md)
