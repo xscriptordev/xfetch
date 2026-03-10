@@ -1,0 +1,36 @@
+name: Sync Roadmap with Issues
+
+on:
+  push:
+    paths:
+      - 'ROADMAP.md'
+    branches:
+      - main
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    # Prevent infinite loops from auto-commits
+    if: "!contains(github.event.head_commit.message, '[roadmap-sync]')"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Sync roadmap with GitHub Issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/sync_roadmap.py --roadmap ROADMAP.md
