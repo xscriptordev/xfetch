@@ -2,148 +2,148 @@
 
 ## Phase 0 · Foundation & Core <!-- phase:phase-0:foundation -->
 
-- [x] Initialize Rust project with dependencies
-- [x] Implement cross-platform OS detection (Linux, Windows, macOS)
-- [x] Create system information gathering module
-- [x] Implement configuration system with JSONC support
-- [x] Build UI rendering engine with crossterm
+- [x] Initialize Rust project with dependencies (#36)
+- [x] Implement cross-platform OS detection (Linux, Windows, macOS) (#37)
+- [x] Create system information gathering module (#38)
+- [x] Implement configuration system with JSONC support (#39)
+- [x] Build UI rendering engine with crossterm (#40)
 
 ## Phase 1 · System Information Modules <!-- phase:phase-1:system-modules -->
 
-- [x] OS Name & Architecture display
-- [x] Kernel version detection
-- [x] Hostname resolution
-- [x] Shell detection and display
-- [x] Terminal emulator detection
-- [x] CPU model & frequency information
-- [x] GPU detection (discrete & integrated)
-- [x] Memory and RAM usage display
-- [x] Disk usage statistics
-- [x] Battery status and percentage
-- [x] System uptime calculation
-- [x] Package count for multiple managers (pacman, dpkg, scoop)
-- [x] Desktop Environment / Window Manager detection
+- [x] OS Name & Architecture display (#41)
+- [x] Kernel version detection (#42)
+- [x] Hostname resolution (#43)
+- [x] Shell detection and display (#44)
+- [x] Terminal emulator detection (#45)
+- [x] CPU model & frequency information (#46)
+- [x] GPU detection (discrete & integrated) (#47)
+- [x] Memory and RAM usage display (#48)
+- [x] Disk usage statistics (#49)
+- [x] Battery status and percentage (#50)
+- [x] System uptime calculation (#51)
+- [x] Package count for multiple managers (pacman, dpkg, scoop) (#52)
+- [x] Desktop Environment / Window Manager detection (#53)
 
 ## Phase 2 · Visual Customization & Layouts <!-- phase:phase-2:visual-features -->
 
-- [x] Custom ASCII art support from text files
-- [x] Image/SVG logo support via viuer
-- [x] ANSI color codes in ASCII logos
-- [x] Icon customization per module (Nerd Fonts)
-- [x] Color customization per module
-- [x] Default layout (side-by-side)
-- [x] Pac-Man layout with custom header/footer
-- [x] Side-block layout implementation
-- [x] Tree layout for hierarchical display
-- [x] Section layout for grouped information
-- [x] Color palette display with style options
+- [x] Custom ASCII art support from text files (#54)
+- [x] Image/SVG logo support via viuer (#55)
+- [x] ANSI color codes in ASCII logos (#56)
+- [x] Icon customization per module (Nerd Fonts) (#57)
+- [x] Color customization per module (#58)
+- [x] Default layout (side-by-side) (#59)
+- [x] Pac-Man layout with custom header/footer (#60)
+- [x] Side-block layout implementation (#61)
+- [x] Tree layout for hierarchical display (#62)
+- [x] Section layout for grouped information (#63)
+- [x] Color palette display with style options (#64)
 
 ## Phase 3 · Documentation & Examples <!-- phase:phase-3:documentation -->
 
-- [x] Installation guide (INSTALLATION.md)
-- [x] Configuration guide (CONFIGURATION.md)
-- [x] Quick install script for Linux/macOS
-- [x] PowerShell install script for Windows
-- [x] Create 20+ example configurations
-- [x] Create sample logos (text and SVG)
-- [x] Setup uninstallation scripts
-- [x] Layout documentation (LAYOUTS.md)
+- [x] Installation guide (INSTALLATION.md) (#65)
+- [x] Configuration guide (CONFIGURATION.md) (#66)
+- [x] Quick install script for Linux/macOS (#67)
+- [x] PowerShell install script for Windows (#68)
+- [x] Create 20+ example configurations (#69)
+- [x] Create sample logos (text and SVG) (#70)
+- [x] Setup uninstallation scripts (#71)
+- [x] Layout documentation (LAYOUTS.md) (#72)
 
 ## Phase 4 · Package Manager Expansion <!-- phase:phase-4:package-managers -->
 
-- [ ] Add RPM package manager support (Fedora, RHEL)
-- [ ] Add APK package manager support (Alpine)
-- [ ] Add Nix package manager support
-- [ ] Add Homebrew package manager support (macOS/Linux)
-- [ ] Add Chocolatey package manager support (Windows)
-- [ ] Detect multiple installed package managers
-- [/] Optimize package count detection performance
+- [ ] Add RPM package manager support (Fedora, RHEL) (#73)
+- [ ] Add APK package manager support (Alpine) (#74)
+- [ ] Add Nix package manager support (#75)
+- [ ] Add Homebrew package manager support (macOS/Linux) (#76)
+- [ ] Add Chocolatey package manager support (Windows) (#77)
+- [ ] Detect multiple installed package managers (#78)
+- [/] Optimize package count detection performance (#79)
 
 ## Phase 5 · Network & Connectivity <!-- phase:phase-5:network -->
 
-- [ ] Implement local IP address detection
-- [ ] Fetch public IP address (with privacy option)
-- [ ] Add IPv6 support
-- [ ] Display network interface information
-- [ ] Add option to disable IP fetching for privacy
+- [ ] Implement local IP address detection (#80)
+- [ ] Fetch public IP address (with privacy option) (#81)
+- [ ] Add IPv6 support (#82)
+- [ ] Display network interface information (#83)
+- [ ] Add option to disable IP fetching for privacy (#84)
 
 ## Phase 6 · Enhanced Modules <!-- phase:phase-6:enhanced-modules -->
 
-- [ ] Implement music player integration (MPD support)
-- [ ] Add Spotify current track display
-- [ ] Implement weather module with location API
-- [ ] Add timezone and world clock display
-- [ ] Implement user info and login status
-- [ ] Add display resolution and refresh rate
-- [ ] Add theme and color scheme detection
+- [ ] Implement music player integration (MPD support) (#85)
+- [ ] Add Spotify current track display (#86)
+- [ ] Implement weather module with location API (#87)
+- [ ] Add timezone and world clock display (#88)
+- [ ] Implement user info and login status (#89)
+- [ ] Add display resolution and refresh rate (#90)
+- [ ] Add theme and color scheme detection (#91)
 
 ## Phase 7 · Additional Layouts <!-- phase:phase-7:additional-layouts -->
 
-- [ ] Implement compact layout for minimal output
-- [ ] Implement horizontal layout variant
-- [ ] Implement bottom layout with logo below info
-- [ ] Implement minimal layout (text-only)
-- [ ] Add layout preview documentation
+- [ ] Implement compact layout for minimal output (#92)
+- [ ] Implement horizontal layout variant (#93)
+- [ ] Implement bottom layout with logo below info (#94)
+- [ ] Implement minimal layout (text-only) (#95)
+- [ ] Add layout preview documentation (#96)
 
 ## Phase 8 · Performance Optimization <!-- phase:phase-8:performance -->
 
-- [ ] Parallelize slow hardware probes
-- [ ] Implement caching for module data
-- [ ] Optimize GPU detection for multi-GPU systems
-- [ ] Add lazy loading for optional modules
-- [ ] Benchmark and profile performance
+- [ ] Parallelize slow hardware probes (#97)
+- [ ] Implement caching for module data (#98)
+- [ ] Optimize GPU detection for multi-GPU systems (#99)
+- [ ] Add lazy loading for optional modules (#100)
+- [ ] Benchmark and profile performance (#101)
 
 ## Phase 9 · CI/CD & Distribution <!-- phase:phase-9:cicd -->
 
-- [ ] Setup GitHub Actions for automated builds
-- [ ] Create binary releases for Linux x86_64
-- [ ] Create binary releases for macOS (Intel & ARM)
-- [ ] Create binary releases for Windows
-- [ ] Setup AUR package for Arch Linux
-- [ ] Setup Homebrew tap for macOS
-- [ ] Setup PyPI or cargo registry for distribution
-- [ ] Setup automated changelog generation
+- [ ] Setup GitHub Actions for automated builds (#102)
+- [ ] Create binary releases for Linux x86_64 (#103)
+- [ ] Create binary releases for macOS (Intel & ARM) (#104)
+- [ ] Create binary releases for Windows (#105)
+- [ ] Setup AUR package for Arch Linux (#106)
+- [ ] Setup Homebrew tap for macOS (#107)
+- [ ] Setup PyPI or cargo registry for distribution (#108)
+- [ ] Setup automated changelog generation (#109)
 
 ## Phase 10 · Community & Ecosystem <!-- phase:phase-10:ecosystem -->
 
-- [ ] Create themes repository / registry
-- [ ] Implement theme download manager
-- [ ] Create online theme preview tool
-- [ ] Setup community theme contributions process
-- [ ] Create plugin system for custom modules
-- [ ] Implement plugin configuration validation
-- [ ] Setup community issue templates
-- [ ] Create contribution guidelines (CONTRIBUTING.md)
+- [ ] Create themes repository / registry (#110)
+- [ ] Implement theme download manager (#111)
+- [ ] Create online theme preview tool (#112)
+- [ ] Setup community theme contributions process (#113)
+- [ ] Create plugin system for custom modules (#114)
+- [ ] Implement plugin configuration validation (#115)
+- [ ] Setup community issue templates (#116)
+- [ ] Create contribution guidelines (CONTRIBUTING.md) (#117)
 
 ## Phase 11 · Testing & Quality Assurance <!-- phase:phase-11:testing -->
 
-- [ ] Implement unit tests for info module
-- [ ] Implement unit tests for config module
-- [ ] Implement integration tests for layouts
-- [ ] Setup linting with clippy
-- [ ] Setup code formatter (rustfmt)
-- [ ] Implement platform-specific tests for each OS
-- [ ] Add cross-platform testing suite
-- [ ] Setup code coverage reporting
+- [ ] Implement unit tests for info module (#118)
+- [ ] Implement unit tests for config module (#119)
+- [ ] Implement integration tests for layouts (#120)
+- [ ] Setup linting with clippy (#121)
+- [ ] Setup code formatter (rustfmt) (#122)
+- [ ] Implement platform-specific tests for each OS (#123)
+- [ ] Add cross-platform testing suite (#124)
+- [ ] Setup code coverage reporting (#125)
 
 ## Phase 12 · Advanced Features <!-- phase:phase-12:advanced -->
 
-- [ ] Implement custom module scripting language / support
-- [ ] Add conditional module display based on system state
-- [ ] Implement theme system with variables
-- [ ] Add animation support for transitional elements
-- [ ] Implement real-time stats updates / daemon mode
-- [ ] Add config hot-reload capability
-- [ ] Implement telemetry (optional, privacy-respecting)
-- [ ] Add accessibility features (high contrast themes)
+- [ ] Implement custom module scripting language / support (#126)
+- [ ] Add conditional module display based on system state (#127)
+- [ ] Implement theme system with variables (#128)
+- [ ] Add animation support for transitional elements (#129)
+- [ ] Implement real-time stats updates / daemon mode (#130)
+- [ ] Add config hot-reload capability (#131)
+- [ ] Implement telemetry (optional, privacy-respecting) (#132)
+- [ ] Add accessibility features (high contrast themes) (#133)
 
 ## Phase 13 · Documentation & Marketing <!-- phase:phase-13:marketing -->
 
-- [ ] Create comprehensive user manual
-- [ ] Create video tutorials
-- [ ] Setup project website with showcase
-- [ ] Create developer documentation
-- [ ] Publish blog posts about features
-- [ ] Create comparison guide with similar tools
-- [ ] Setup Discord/Slack community channel
-- [ ] Create contribution bounty program
+- [ ] Create comprehensive user manual (#134)
+- [ ] Create video tutorials (#135)
+- [ ] Setup project website with showcase (#136)
+- [ ] Create developer documentation (#137)
+- [ ] Publish blog posts about features (#138)
+- [ ] Create comparison guide with similar tools (#139)
+- [ ] Setup Discord/Slack community channel (#140)
+- [ ] Create contribution bounty program (#141)
