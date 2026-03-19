@@ -86,8 +86,7 @@ pub fn load_config(path: Option<String>) -> Config {
     let config_path = if let Some(p) = path {
         PathBuf::from(p)
     } else {
-        let config_dir = dirs::config_dir().unwrap_or_else(|| PathBuf::from("."));
-        config_dir.join("xfetch").join("config.jsonc")
+        default_config_path()
     };
     
     // println!("Debug: Config path is {:?}", config_path);
@@ -117,4 +116,27 @@ pub fn load_config(path: Option<String>) -> Config {
             Config::default()
         }
     }
+}
+
+pub fn default_config_path() -> PathBuf {
+    let config_dir = dirs::config_dir().unwrap_or_else(|| PathBuf::from("."));
+    config_dir.join("xfetch").join("config.jsonc")
+}
+
+pub fn generate_config(path: Option<String>) -> std::io::Result<PathBuf> {
+    let config_path = if let Some(p) = path {
+        PathBuf::from(p)
+    } else {
+        default_config_path()
+    };
+
+    if let Some(parent) = config_path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+
+    // Keep generated defaults aligned with the curated pacman preset in the repo.
+    let template = include_str!("../configs/layout_pacman_full.jsonc");
+    fs::write(&config_path, template)?;
+
+    Ok(config_path)
 }

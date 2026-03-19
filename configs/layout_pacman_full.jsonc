@@ -21,7 +21,7 @@
     "header_icons": ["ᗧ", "●", "●", "●", "●"],
     "footer_text": "GAME OVER",
     "icons": {
-        "os": "",
+        "os": "x",
         "kernel": "",
         "uptime": "󰔛",
         "packages": "",
@@ -34,7 +34,7 @@
         "disk": "󰋊",
         "battery": "",
         "local_ip": "󰩟",
-        "palette": "🎨"
+        "palette": "P"
     },
     "colors": {
         "os": "Red",
