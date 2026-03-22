@@ -9,7 +9,7 @@ if (-not (Get-Command cargo -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-$RepoUrl = "https://github.com/xscriptordev/xfetch.git"
+$RepoUrl = "https://github.com/xscriptor/xfetch.git"
 $TempDir = Join-Path $env:TEMP "xfetch_install"
 
 # Clean previous temp dir

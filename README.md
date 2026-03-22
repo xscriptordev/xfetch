@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![xfetch](https://xscriptordev.github.io/badges/software/xfetch.svg) ![linux](https://xscriptordev.github.io/badges/os/linux.svg) ![macos](https://xscriptordev.github.io/badges/os/macos.svg) ![windows](https://xscriptordev.github.io/badges/os/windows.svg) ![rust](https://xscriptordev.github.io/badges/languages/rust.svg) ![mit](https://xscriptordev.github.io/badges/licenses/mit.svg)
+![xfetch](https://xscriptor.github.io/badges/software/xfetch.svg) ![linux](https://xscriptor.github.io/badges/os/linux.svg) ![macos](https://xscriptor.github.io/badges/os/macos.svg) ![windows](https://xscriptor.github.io/badges/os/windows.svg) ![rust](https://xscriptor.github.io/badges/languages/rust.svg) ![mit](https://xscriptor.github.io/badges/licenses/mit.svg)
 
 A cross-platform system information fetching tool inspired by fastfetch and neofetch, written in Rust.
 
@@ -43,12 +43,12 @@ A cross-platform system information fetching tool inspired by fastfetch and neof
 
 ### Linux / macOS
 ```bash
-curl -fsSL https://raw.githubusercontent.com/xscriptordev/xfetch/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/xscriptor/xfetch/main/install.sh | bash
 ```
 
 ### Windows (PowerShell)
 ```powershell
-irm https://raw.githubusercontent.com/xscriptordev/xfetch/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/xscriptor/xfetch/main/install.ps1 | iex
 ```
 
 ## Features

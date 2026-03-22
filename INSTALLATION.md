@@ -29,7 +29,7 @@ For Windows, download the installer from [rust-lang.org](https://www.rust-lang.o
 
 2.  **Clone and Install**:
     ```bash
-    git clone https://github.com/xscriptordev/xfetch.git
+    git clone https://github.com/xscriptor/xfetch.git
     cd xfetch
     cargo install --path .
     ```
@@ -46,7 +46,7 @@ For Windows, download the installer from [rust-lang.org](https://www.rust-lang.o
 
 2.  **Clone and Install**:
     ```bash
-    git clone https://github.com/xscriptordev/xfetch.git
+    git clone https://github.com/xscriptor/xfetch.git
     cd xfetch
     cargo install --path .
     ```
@@ -57,7 +57,7 @@ This method installs xfetch as a proper Arch package, making it easy to update a
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/xscriptordev/xfetch.git
+    git clone https://github.com/xscriptor/xfetch.git
     cd xfetch
     ```
 
@@ -94,7 +94,7 @@ sudo pacman -R xfetch-git
 
 2.  **Clone and Install**:
     ```bash
-    git clone https://github.com/xscriptordev/xfetch.git
+    git clone https://github.com/xscriptor/xfetch.git
     cd xfetch
     cargo install --path .
     ```
@@ -109,7 +109,7 @@ sudo pacman -R xfetch-git
 2.  **Clone and Install**:
     Open PowerShell or Command Prompt:
     ```powershell
-    git clone https://github.com/xscriptordev/xfetch.git
+    git clone https://github.com/xscriptor/xfetch.git
     cd xfetch
     cargo install --path .
     ```

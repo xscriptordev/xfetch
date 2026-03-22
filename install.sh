@@ -3,7 +3,7 @@
 
 set -e
 
-REPO_URL="https://github.com/xscriptordev/xfetch"
+REPO_URL="https://github.com/xscriptor/xfetch"
 INSTALL_DIR="$HOME/.local/bin"
 CONFIG_DIR="$HOME/.config/xfetch"
 

@@ -3,7 +3,7 @@ name = "xfetch"
 version = "0.1.0"
 release = 1
 description = "Cross-platform system information fetch tool written in Rust"
-url = "https://github.com/xscriptordev/xfetch"
+url = "https://github.com/xscriptor/xfetch"
 license = ["MIT"]
 arch = ["x86_64"]
 
